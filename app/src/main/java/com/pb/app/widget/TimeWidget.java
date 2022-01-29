@@ -6,13 +6,18 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.AlarmClock;
+import android.provider.CalendarContract;
 import android.text.format.Time;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+
+import java.util.Date;
 
 
 /**
@@ -34,13 +39,19 @@ public class TimeWidget extends AppWidgetProvider {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.time_widget);
         switch (resID) {
             case R.id.tv_top_left_btn:
-                Toast.makeText(context, "1111", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(AlarmClock.ACTION_SHOW_ALARMS);
+                context.startActivity(i);
                 break;
             case R.id.tv_top_right_btn:
-                Toast.makeText(context, "2222", Toast.LENGTH_SHORT).show();
+                Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                builder.appendPath("time");
+                ContentUris.appendId(builder, new Date().getTime());
+                Intent calIntent = new Intent(Intent.ACTION_VIEW) .setData(builder.build());
+                context.startActivity(calIntent);
                 break;
             case R.id.tv_bottom_btn:
-                Toast.makeText(context, "3333", Toast.LENGTH_SHORT).show();
+                context.startService(new Intent(context, TimeService.class));//开启服务
+                Toast.makeText(context, "服务启动", Toast.LENGTH_SHORT).show();
                 break;
         }
         // 获得appwidget管理实例，用于管理appwidget以便进行更新操作
@@ -74,7 +85,7 @@ public class TimeWidget extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
         //使用Alarm定时更新界面数据
         AlarmManager alarm = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        alarm.setRepeating(AlarmManager.RTC, time.toMillis(true), 60*1000, pendingIntent);
+        alarm.setRepeating(AlarmManager.RTC, time.toMillis(true), 1000, pendingIntent);
 
 
         super.onUpdate(context, appWidgetManager, appWidgetIds);
