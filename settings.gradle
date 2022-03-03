@@ -1,2 +1,2 @@
-rootProject.name = "HomePageWidget"
+rootProject.name = "MyClockWidget"
 include ':app'
