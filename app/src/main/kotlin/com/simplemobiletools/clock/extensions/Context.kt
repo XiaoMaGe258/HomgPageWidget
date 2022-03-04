@@ -51,7 +51,18 @@ fun Context.getFormattedDate(calendar: Calendar): String {
 
     val dayString = resources.getStringArray(R.array.week_days_short)[dayOfWeek]
     val monthString = resources.getStringArray(R.array.months)[month]
-    return "$dayString, $dayOfMonth $monthString"
+
+    val newDate = "${calendar.get(Calendar.YEAR)}-${getDoubleNum(calendar.get(Calendar.MONTH))}-${getDoubleNum(calendar.get(Calendar.DAY_OF_MONTH))}   $dayString"
+    return newDate
+//    return "$dayString, $dayOfMonth $monthString"
+}
+
+fun getDoubleNum(num: Int): String{
+    if(num < 10){
+        return "0$num"
+    }else{
+        return "$num"
+    }
 }
 
 fun Context.getEditedTimeZonesMap(): HashMap<Int, String> {
