@@ -24,9 +24,7 @@ import android.content.ContentUris
 import android.provider.CalendarContract
 
 import android.provider.AlarmClock
-
-
-
+import android.provider.Settings
 
 class MyWidgetDateTimeProvider : AppWidgetProvider() {
 
@@ -52,6 +50,7 @@ class MyWidgetDateTimeProvider : AppWidgetProvider() {
             }
         }
     }
+
     private fun getProperLayout(context: Context): Int{
         return R.layout.widget_date_time_with_shadow
     }
@@ -94,12 +93,12 @@ class MyWidgetDateTimeProvider : AppWidgetProvider() {
             setTextColor(R.id.widget_date, widgetTextColor)
             setTextColor(R.id.widget_next_alarm, widgetTextColor)
 
-            if (context.config.useTextShadow) {
-                val bitmap = getMultiplyColoredBitmap(R.drawable.ic_clock_shadowed, widgetTextColor, context)
-                setImageViewBitmap(R.id.widget_next_alarm_image, bitmap)
-            } else {
+//            if (context.config.useTextShadow) {
+//                val bitmap = getMultiplyColoredBitmap(R.drawable.ic_clock_shadowed, widgetTextColor, context)
+//                setImageViewBitmap(R.id.widget_next_alarm_image, bitmap)
+//            } else {
                 setImageViewBitmap(R.id.widget_next_alarm_image, context.resources.getColoredBitmap(R.drawable.ic_alarm_vector, widgetTextColor))
-            }
+//            }
         }
     }
 
@@ -124,37 +123,41 @@ class MyWidgetDateTimeProvider : AppWidgetProvider() {
     }
 
     private fun getFormattedNextAlarm(context: Context): String {
-        val nextAlarm = context.getNextAlarm()
-        if (nextAlarm.isEmpty()) {
-            return ""
-        }
+        return Settings.System.getString(
+            context.getContentResolver(), Settings.System.NEXT_ALARM_FORMATTED
+        )
 
-        val isIn24HoursFormat = !nextAlarm.endsWith(".")
-        return when {
-            context.config.use24HourFormat && !isIn24HoursFormat -> {
-                val dayTime = nextAlarm.split(" ")
-                val times = dayTime[1].split(":")
-                val hours = times[0].toInt()
-                val minutes = times[1].toInt()
-                val seconds = 0
-                val isAM = dayTime[2].startsWith("a", true)
-                val newHours = when {
-                    hours == 12 && isAM -> 0
-                    hours == 12 && !isAM -> 12
-                    !isAM -> hours + 12
-                    else -> hours
-                }
-                formatTime(false, true, newHours, minutes, seconds)
-            }
-            !context.config.use24HourFormat && isIn24HoursFormat -> {
-                val times = nextAlarm.split(" ")[1].split(":")
-                val hours = times[0].toInt()
-                val minutes = times[1].toInt()
-                val seconds = 0
-                context.formatTo12HourFormat(false, hours, minutes, seconds)
-            }
-            else -> nextAlarm
-        }
+//        val nextAlarm = context.getNextAlarm()
+//        if (nextAlarm.isEmpty()) {
+//            return ""
+//        }
+//
+//        val isIn24HoursFormat = !nextAlarm.endsWith(".")
+//        return when {
+//            context.config.use24HourFormat && !isIn24HoursFormat -> {
+//                val dayTime = nextAlarm.split(" ")
+//                val times = dayTime[1].split(":")
+//                val hours = times[0].toInt()
+//                val minutes = times[1].toInt()
+//                val seconds = 0
+//                val isAM = dayTime[2].startsWith("a", true)
+//                val newHours = when {
+//                    hours == 12 && isAM -> 0
+//                    hours == 12 && !isAM -> 12
+//                    !isAM -> hours + 12
+//                    else -> hours
+//                }
+//                formatTime(false, true, newHours, minutes, seconds)
+//            }
+//            !context.config.use24HourFormat && isIn24HoursFormat -> {
+//                val times = nextAlarm.split(" ")[1].split(":")
+//                val hours = times[0].toInt()
+//                val minutes = times[1].toInt()
+//                val seconds = 0
+//                context.formatTo12HourFormat(false, hours, minutes, seconds)
+//            }
+//            else -> nextAlarm
+//        }
     }
 
     override fun onAppWidgetOptionsChanged(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, newOptions: Bundle?) {
