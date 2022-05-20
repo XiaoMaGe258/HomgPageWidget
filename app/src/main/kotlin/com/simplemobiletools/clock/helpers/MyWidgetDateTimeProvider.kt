@@ -1,5 +1,6 @@
 package com.simplemobiletools.clock.helpers
 
+import android.app.AlarmManager
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -123,10 +124,11 @@ class MyWidgetDateTimeProvider : AppWidgetProvider() {
     }
 
     private fun getFormattedNextAlarm(context: Context): String {
-        return Settings.System.getString(
-            context.getContentResolver(), Settings.System.NEXT_ALARM_FORMATTED
-        )
+//        return Settings.System.getString(
+//            context.getContentResolver(), Settings.System.NEXT_ALARM_FORMATTED
+//        )
 
+        return "天气不错"
 //        val nextAlarm = context.getNextAlarm()
 //        if (nextAlarm.isEmpty()) {
 //            return ""

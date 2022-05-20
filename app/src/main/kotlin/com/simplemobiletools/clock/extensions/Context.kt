@@ -52,7 +52,7 @@ fun Context.getFormattedDate(calendar: Calendar): String {
     val dayString = resources.getStringArray(R.array.week_days_short)[dayOfWeek]
     val monthString = resources.getStringArray(R.array.months)[month]
 
-    val newDate = "${calendar.get(Calendar.YEAR)}-${getDoubleNum(calendar.get(Calendar.MONTH))}-${getDoubleNum(calendar.get(Calendar.DAY_OF_MONTH))}   $dayString"
+    val newDate = "${calendar.get(Calendar.YEAR)}-${getDoubleNum(calendar.get(Calendar.MONTH)+1)}-${getDoubleNum(calendar.get(Calendar.DAY_OF_MONTH))}   $dayString"
     return newDate
 //    return "$dayString, $dayOfMonth $monthString"
 }
