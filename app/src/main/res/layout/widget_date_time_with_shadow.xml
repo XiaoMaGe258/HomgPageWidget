@@ -27,13 +27,13 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4">
+            android:layout_weight="4.6">
 
             <TextView
                 android:id="@+id/widget_time"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:autoSizeMaxTextSize="300sp"
+                android:autoSizeMaxTextSize="360sp"
                 android:autoSizeMinTextSize="2sp"
                 android:autoSizeStepGranularity="1sp"
                 android:autoSizeTextType="uniform"
@@ -78,6 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:autoSizeMaxTextSize="28sp"
                 android:autoSizeMinTextSize="2sp"
                 android:autoSizeStepGranularity="1sp"
                 android:autoSizeTextType="uniform"
@@ -95,6 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:visibility="visible"
                 android:gravity="center_horizontal">
 
                 <LinearLayout

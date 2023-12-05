@@ -1,6 +1,5 @@
 package com.simplemobiletools.clock.helpers
 
-import android.app.AlarmManager
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -8,24 +7,18 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.*
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.RemoteViews
 import com.simplemobiletools.clock.R
 import com.simplemobiletools.clock.activities.SplashActivity
-import com.simplemobiletools.clock.extensions.*
-import com.simplemobiletools.commons.extensions.*
-import com.simplemobiletools.commons.helpers.isOreoPlus
+import com.simplemobiletools.clock.extensions.config
+import com.simplemobiletools.clock.extensions.getFormattedDate
+import com.simplemobiletools.clock.extensions.getFormattedTime
+import com.simplemobiletools.clock.extensions.scheduleNextWidgetUpdate
+import com.simplemobiletools.commons.extensions.applyColorFilter
+import com.simplemobiletools.commons.extensions.getLaunchIntent
+import com.simplemobiletools.commons.extensions.setText
 import java.util.*
-import android.widget.Toast
-
-import android.content.ContentUris
-
-import android.provider.CalendarContract
-
-import android.provider.AlarmClock
-import android.provider.Settings
 
 class MyWidgetDateTimeProvider : AppWidgetProvider() {
 
@@ -75,12 +68,16 @@ class MyWidgetDateTimeProvider : AppWidgetProvider() {
 
     private fun updateTexts(context: Context, views: RemoteViews) {
         val timeText = context.getFormattedTime(getPassedSeconds(), false, false).toString()
-        val nextAlarm = getFormattedNextAlarm(context)
+//        val nextAlarm = getFormattedNextAlarm(context)
         views.apply {
+            //时间
             setText(R.id.widget_time, timeText)
+            //年月日
             setText(R.id.widget_date, context.getFormattedDate(Calendar.getInstance()))
-            setText(R.id.widget_next_alarm, nextAlarm)
-            setVisibleIf(R.id.widget_alarm_holder, nextAlarm.isNotEmpty())
+            //第三行文字
+            setText(R.id.widget_next_alarm, getTipsText())
+
+//            setVisibleIf(R.id.widget_alarm_holder, nextAlarm.isNotEmpty())
         }
     }
 
@@ -98,7 +95,7 @@ class MyWidgetDateTimeProvider : AppWidgetProvider() {
 //                val bitmap = getMultiplyColoredBitmap(R.drawable.ic_clock_shadowed, widgetTextColor, context)
 //                setImageViewBitmap(R.id.widget_next_alarm_image, bitmap)
 //            } else {
-                setImageViewBitmap(R.id.widget_next_alarm_image, context.resources.getColoredBitmap(R.drawable.ic_alarm_vector, widgetTextColor))
+//                setImageViewBitmap(R.id.widget_next_alarm_image, context.resources.getColoredBitmap(R.drawable.ic_alarm_vector, widgetTextColor))
 //            }
         }
     }
@@ -121,6 +118,23 @@ class MyWidgetDateTimeProvider : AppWidgetProvider() {
         in2.putExtra(ACTION_TYPE, ACTION_CALENDAR)
         val pi2 = PendingIntent.getActivity(context, 1112, in2, PendingIntent.FLAG_UPDATE_CURRENT)
         views.setOnClickPendingIntent(R.id.tv_right_btn, pi2)
+    }
+
+    private fun getTipsText(): String {
+        val tips = arrayOf(
+            "永远相信美好的事情即将发生",
+            "心态放平",
+            "雨过天晴",
+            "风雨之后才能见到彩虹",
+            "走过昨天，拥抱今天，期待明天",
+            "每一个早晨，都是新的开始",
+            "山高水长，岁月静好",
+            "天气不错，心情也很好",
+            "今天比昨天更好",
+            "山穷水尽疑无路",
+            "柳暗花明又一村",
+            "再遥远的距离，也越走越短")
+        return tips[Random().nextInt(12)]
     }
 
     private fun getFormattedNextAlarm(context: Context): String {
