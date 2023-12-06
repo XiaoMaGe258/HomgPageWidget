@@ -133,7 +133,7 @@ class MyWidgetDateTimeProvider : AppWidgetProvider() {
             "今天比昨天更好",
             "山穷水尽疑无路",
             "柳暗花明又一村",
-            "再遥远的距离，也越走越短")
+            "再遥远的距离，也会越走越近")
         return tips[Random().nextInt(12)]
     }
 
